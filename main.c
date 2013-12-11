@@ -26,6 +26,7 @@ int main(void)
 		uint8_t Sta = ERROR;
     	while(Sta == ERROR)
     		Sta = nRF_Check();
+    	nRF_RX_Mode();
     while(1);
 
 	
