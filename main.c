@@ -21,7 +21,13 @@ void System_Init(void)
 int main(void)
 {
 	System_Init();
-	while(1);
+	
+		/* nRF Check */
+		uint8_t Sta = ERROR;
+    	while(Sta == ERROR)
+    		Sta = nRF_Check();
+    while(1);
+
 	
 
 }
