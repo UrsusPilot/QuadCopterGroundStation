@@ -21,16 +21,23 @@ void System_Init(void)
 int main(void)
 {
 	System_Init();
+	printf("Rx mode test...\n\r");
 	
-		/* nRF Check */
-		uint8_t Sta = ERROR;
+	/* nRF Check */
+	uint8_t Sta = ERROR;
     	while(Sta == ERROR)
     		Sta = nRF_Check();
+    	printf("Start ...\n\r");
+    	printf("============");
+
+
     	nRF_RX_Mode();
-		while(1){
-			Sta = nRF_Rx_Data(RxBuf[0]);
-			if(Sta == RX_DR) {
-      	 	 Transport_Recv(RxBuf[0]);
+	while(1){
+	//	Sta = nRF_Rx_Data(RxBuf[0]);
+		printf("status = ");
+		if(Sta == RX_DR) {
+      	 //	 	Transport_Recv(RxBuf[0]);
+      	 	 	printf("receive ! ");
      	 	}
      	 }
 	
