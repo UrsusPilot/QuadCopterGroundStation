@@ -10,9 +10,9 @@ void System_Init(void)
 {
 	SystemInit();
 	LED_Config();
-	// KEY_Config();
-	// RS232_Config();
-	// nRF24L01_Config();
+	 //KEY_Config();
+	 RS232_Config();
+	 nRF24L01_Config();
 
 	 Delay_10ms(2);
 }
@@ -27,8 +27,12 @@ int main(void)
     	while(Sta == ERROR)
     		Sta = nRF_Check();
     	nRF_RX_Mode();
-    while(1);
-
+		while(1){
+			Sta = nRF_Rx_Data(RxBuf[0]);
+			if(Sta == RX_DR) {
+      	 	 Transport_Recv(RxBuf[0]);
+     	 	}
+     	 }
 	
 
 }
