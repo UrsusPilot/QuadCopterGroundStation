@@ -7,6 +7,12 @@ BIN_IMAGE=QuadrotorFlightControl.bin
 CC=arm-none-eabi-gcc
 OBJCOPY=arm-none-eabi-objcopy
 ST_LIB = ./Libraries/STM32F4xx_StdPeriph_Driver
+PROGRAM = .//Old_Program
+PROGRAM_ALG = $(PROGRAM)/Program_Algorithm
+PROGRAM_DIR = $(PROGRAM)/Program_Driver
+PROGRAM_MOD = $(PROGRAM)/Program_Module
+PROGRAM_SYS = $(PROGRAM)/Program_System
+_PROJECTFC_ = $(PROGRAM)/ProjectFC
 
 TOOLCHAIN_PATH ?= /usr/local/csl/arm-2012.03/arm-none-eabi
 C_LIB= $(TOOLCHAIN_PATH)/lib/thumb2
@@ -33,6 +39,10 @@ CFLAGS+=-I./Libraries/CMSIS
 #STM32F4xx Peripherys including
 CFLAGS+=-I./Libraries/STM32F4xx_StdPeriph_Driver/inc
 #Major programs including
+CFLAGS+=-I./Program_System
+CFLAGS+=-I./Program_Algorithm
+CFLAGS+=-I./Program_Driver
+CFLAGS+=-I./Program_Module
 
 LDFLAGS += -lm -lc -lgcc
 
@@ -53,9 +63,13 @@ SRC+= ./Libraries/CMSIS/system_stm32f4xx.c \
 
 
 #Major programs source code
-SRC += main.c\
-	stm32f4_delay.c\
-	led.c
+SRC += $(PROGRAM_ALG)/algorithm_*.c \
+		$(PROGRAM_DIR)/stm32f4_*.c \
+		$(PROGRAM_MOD)/module_*.c \
+		$(PROGRAM_SYS)/QCopterFC_*.c \
+		Libraries/CMSIS/FastMathFunctions/arm_cos_f32.c \
+		Libraries/CMSIS/FastMathFunctions/arm_sin_f32.c
+
 
 #STM32 startup file
 STARTUP=./Libraries/CMSIS/startup_stm32f4xx.s
