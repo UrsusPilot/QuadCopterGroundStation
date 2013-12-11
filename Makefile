@@ -7,12 +7,6 @@ BIN_IMAGE=QuadrotorFlightControl.bin
 CC=arm-none-eabi-gcc
 OBJCOPY=arm-none-eabi-objcopy
 ST_LIB = ./Libraries/STM32F4xx_StdPeriph_Driver
-PROGRAM = .//Old_Program
-PROGRAM_ALG = $(PROGRAM)/Program_Algorithm
-PROGRAM_DIR = $(PROGRAM)/Program_Driver
-PROGRAM_MOD = $(PROGRAM)/Program_Module
-PROGRAM_SYS = $(PROGRAM)/Program_System
-_PROJECTFC_ = $(PROGRAM)/ProjectFC
 
 TOOLCHAIN_PATH ?= /usr/local/csl/arm-2012.03/arm-none-eabi
 C_LIB= $(TOOLCHAIN_PATH)/lib/thumb2
@@ -38,11 +32,6 @@ CFLAGS+= \
 CFLAGS+=-I./Libraries/CMSIS
 #STM32F4xx Peripherys including
 CFLAGS+=-I./Libraries/STM32F4xx_StdPeriph_Driver/inc
-#Major programs including
-CFLAGS+=-I./Program_System
-CFLAGS+=-I./Program_Algorithm
-CFLAGS+=-I./Program_Driver
-CFLAGS+=-I./Program_Module
 
 LDFLAGS += -lm -lc -lgcc
 
@@ -51,22 +40,18 @@ SRC=$(wildcard ./Libraries/CMSIS/*.c)
 #STM32F4xx Peripherys source code
 #SRC+=$(wildcard ./Libraries/STM32F4xx_StdPeriph_Driver/src/*.c)
 SRC+= ./Libraries/CMSIS/system_stm32f4xx.c \
-	$(ST_LIB)/src/misc.c \
 	$(ST_LIB)/src/stm32f4xx_rcc.c \
-	$(ST_LIB)/src/stm32f4xx_dma.c \
-	$(ST_LIB)/src/stm32f4xx_flash.c \
 	$(ST_LIB)/src/stm32f4xx_gpio.c \
 	$(ST_LIB)/src/stm32f4xx_usart.c \
-	$(ST_LIB)/src/stm32f4xx_tim.c\
 	$(ST_LIB)/src/stm32f4xx_spi.c\
-	$(ST_LIB)/src/stm32f4xx_i2c.c
 
 
 #Major programs source code
-SRC += $(PROGRAM_ALG)/algorithm_*.c \
-		$(PROGRAM_DIR)/stm32f4_*.c \
-		$(PROGRAM_MOD)/module_*.c \
-		$(PROGRAM_SYS)/QCopterFC_*.c \
+SRC += module_nrf24l01.c module_rs232.c stm32f4_spi.c stm32f4_delay.c\
+		main.c \
+		stm32f4_usart.c \
+		led.c\
+		algorithm_string.c \
 		Libraries/CMSIS/FastMathFunctions/arm_cos_f32.c \
 		Libraries/CMSIS/FastMathFunctions/arm_sin_f32.c
 

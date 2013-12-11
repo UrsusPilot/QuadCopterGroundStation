@@ -4,7 +4,8 @@
 #include "main.h"
 #include "stm32f4_delay.h"
 #include "led.h"
-
+#include "module_nrf24l01.h"
+#include "module_rs232.h"
 /*=====================================================================================================*/
 void System_Init(void)
 {
@@ -39,7 +40,10 @@ int main(void)
       	 //	 	Transport_Recv(RxBuf[0]);
       	 	 	printf("receive ! ");
      	 	}
+			//Sta = nRF_Rx_Data(RxBuf[0]);
+			//if(Sta == RX_DR) {
      	 }
+     	
 	
 
 }
