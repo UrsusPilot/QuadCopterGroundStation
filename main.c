@@ -27,12 +27,12 @@ int main(void)
     	while(Sta == ERROR)
     		Sta = nRF_Check();
     	nRF_RX_Mode();
-		while(1){
-			Sta = nRF_Rx_Data(RxBuf[0]);
-			if(Sta == RX_DR) {
-      	 	 Transport_Recv(RxBuf[0]);
-     	 	}
+	while(1){
+			//Sta = nRF_Rx_Data(RxBuf[0]);
+			//if(Sta == RX_DR) {
+      	 	 
      	 }
+     	
 	
 
 }
