@@ -40,15 +40,10 @@ SRC=$(wildcard ./Libraries/CMSIS/*.c)
 #STM32F4xx Peripherys source code
 #SRC+=$(wildcard ./Libraries/STM32F4xx_StdPeriph_Driver/src/*.c)
 SRC+= ./Libraries/CMSIS/system_stm32f4xx.c \
-	$(ST_LIB)/src/misc.c \
 	$(ST_LIB)/src/stm32f4xx_rcc.c \
-	$(ST_LIB)/src/stm32f4xx_dma.c \
-	$(ST_LIB)/src/stm32f4xx_flash.c \
 	$(ST_LIB)/src/stm32f4xx_gpio.c \
 	$(ST_LIB)/src/stm32f4xx_usart.c \
-	$(ST_LIB)/src/stm32f4xx_tim.c\
 	$(ST_LIB)/src/stm32f4xx_spi.c\
-	$(ST_LIB)/src/stm32f4xx_i2c.c
 
 
 #Major programs source code
