@@ -21,7 +21,7 @@ void System_Init(void)
 int main(void)
 {
 	uint8_t Sta = ERROR;
-	uint8_t RxBuf[5][5] = {0};
+	uint8_t RxBuf[5][5] = {{0}};
 
 	System_Init();
 	printf("Rx mode test...\n\r");
