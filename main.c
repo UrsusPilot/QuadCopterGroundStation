@@ -21,7 +21,7 @@ void System_Init(void)
 int main(void)
 {
 	uint8_t Sta = ERROR;
-	uint8_t RxBuf[5][5] = {{0}};
+	uint8_t RxBuf[32]= {0};
 
 	System_Init();
 	printf("Rx mode test...\n\r");
@@ -30,20 +30,27 @@ int main(void)
     	while(Sta == ERROR)
     		Sta = nRF_Check();
     	
+    	nRF_RX_Mode();
 	printf("Start ...\n\r");
     	printf("============");
-    	
-	/*Convert to Rx */
-	nRF_RX_Mode();
-	
-	/*Receive the data from remote quadcopter */
+    
 	while(1){
-		Sta = nRF_Rx_Data(RxBuf[0]);
+
+
+		Sta = nRF_Rx_Data( (uint8_t*)RxBuf);
+
 		printf("status = ");
 		if(Sta == RX_DR) {
-      	 //	 	Transport_Recv(RxBuf[0]);
-      	 	 	printf("receive ! ");
+
+      	 	 	printf("Get RX_DR");
+     
+      	 	 	if (RxBuf[0] != 0)
+      	 	 		printf("%s", RxBuf);
+ 
      	 	}
+
+     	 	Delay_10ms(20);
+
      	 }
      	
 	
