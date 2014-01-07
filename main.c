@@ -39,13 +39,15 @@ int main(void)
 
 		Sta = nRF_Rx_Data( (uint8_t*)RxBuf);
 
-		printf("status = ");
 		if(Sta == RX_DR) {
+			int i = 0;
+			for ( i = 0; i<32 ; i++ ){
 
-      	 	 	printf("Get RX_DR");
-     
-      	 	 	if (RxBuf[0] != 0)
-      	 	 		printf("%s", RxBuf);
+				USART_SendData(USART3, (uint16_t)RxBuf[i]);
+
+				while (USART_GetFlagStatus(USART3, 
+					USART_FLAG_TXE) == RESET);
+			}
  
      	 	}
 
