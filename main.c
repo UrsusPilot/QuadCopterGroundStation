@@ -42,16 +42,16 @@ int main(void)
 		if(Sta == RX_DR) {
 			int i = 0;
 			for ( i = 0; i<32 ; i++ ){
-
-				USART_SendData(USART3, (uint16_t)RxBuf[i]);
-
-				while (USART_GetFlagStatus(USART3, 
-					USART_FLAG_TXE) == RESET);
+				if ( RxBuf[i] != 0){
+					USART_SendData(USART3, (uint16_t)RxBuf[i]);
+					while (USART_GetFlagStatus(USART3,
+					 USART_FLAG_TC) == RESET);
+				}
 			}
  
      	 	}
 
-     	 	Delay_10ms(20);
+     	 	
 
      	 }
      	

@@ -193,7 +193,7 @@ void nRF_TX_Mode(void)
 	nRF_WriteBuf(NRF_WRITE + RX_ADDR_P0, RX_ADDRESS, RX_ADR_WIDTH); // 設置TX節點地址, 主要為了使能ACK
 	nRF_WriteReg(NRF_WRITE + EN_AA, 0x01);    // 使能通道0的自動應答
 	nRF_WriteReg(NRF_WRITE + EN_RXADDR, 0x01); // 使能通道0的接收地址
-	nRF_WriteReg(NRF_WRITE + SETUP_RETR, 0x05); // 設置自動重發間隔時間:250us + 86us;最大自動重發次數:5次
+	nRF_WriteReg(NRF_WRITE + SETUP_RETR, 0x01); // 設置自動重發間隔時間:250us + 86us;最大自動重發次數:5次
 	nRF_WriteReg(NRF_WRITE + RF_CH, CHANAL);  // 設置RF通道為CHANAL
 	nRF_WriteReg(NRF_WRITE + RF_SETUP, 0x0f); // 設置TX發射參數,0db增益,2Mbps,低噪聲增益開啟
 	nRF_WriteReg(NRF_WRITE + CONFIG, 0x0e);   // 配置基本工作模式的參數;PWR_UP,EN_CRC,16BIT_CRC,發射模式,開啟所有中斷
@@ -272,7 +272,7 @@ u8 nRF_Rx_Data(u8 *RxBuf)
 
 	NRF_CE = 1;
 
-	while (NRF_IRQ != 0);
+	Delay_10ms(1);
 
 	NRF_CE = 0;
 
