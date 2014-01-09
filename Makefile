@@ -50,8 +50,9 @@ SRC+= ./Libraries/CMSIS/system_stm32f4xx.c \
 SRC += module_nrf24l01.c module_rs232.c stm32f4_spi.c stm32f4_delay.c\
 		main.c \
 		stm32f4_usart.c \
-		led.c\
 		algorithm_string.c \
+		led.c\
+		string.c\
 		Libraries/CMSIS/FastMathFunctions/arm_cos_f32.c \
 		Libraries/CMSIS/FastMathFunctions/arm_sin_f32.c
 
