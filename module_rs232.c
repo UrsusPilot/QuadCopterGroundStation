@@ -6,6 +6,8 @@
 #include "algorithm_string.h"
 #include <unistd.h>
 #include <stdarg.h>
+#include <string.h>
+#include <ctype.h>
 /*=====================================================================================================*/
 /*=====================================================================================================*
 **函數 : RS232_Config
@@ -262,14 +264,17 @@ char *itoa(int value, char *str)
 	int divideNum = base;
 	int i = 0;
 
+	if (value < 0) {
+		str[0] = '-';
+		i++;
+		value *= -1;
+	}
+
 	while (value / divideNum > 0) {
 		divideNum *= base;
 	}
 
-	if (value < 0) {
-		str[0] = '-';
-		i++;
-	}
+
 
 	while (divideNum / base > 0) {
 		divideNum /= base;
@@ -280,61 +285,6 @@ char *itoa(int value, char *str)
 	str[i] = '\0';
 	return str;
 
-}
-
-/*=====================================================================================================*/
-/*=====================================================================================================*
-**函數 : sprintf
-**功能 :
-**輸入 : ( char * str, const char * format, ... )
-**輸出 : strlen(str)
-**使用 :
-**=====================================================================================================*/
-/*=====================================================================================================*/
-int sprintf(char *str, const char *format, ...)
-{
-	va_list para;
-	va_start(para, format);
-	int curr_pos = 0;
-	char ch[] = {'0', '\0'};
-	char integer[11];
-	str[0] = '\0';
-
-	while (format[curr_pos] != '\0') {
-		if (format[curr_pos] != '%') {
-			ch[0] = format[curr_pos];
-			strcat(str, ch);
-
-		} else {
-			switch (format[++curr_pos]) {
-			case 's':
-				strcat(str, va_arg(para, char *));
-				break;
-
-			case 'c':
-				ch[0] = (char)va_arg(para, int);
-				strcat(str, ch);
-				break;
-
-			case 'i':
-			case 'd':
-				strcat(str, itoa(va_arg(para, int), integer));
-				break;
-
-			case 'u':
-				strcat(str, itoa(va_arg(para, unsigned), integer));
-				break;
-
-			default:
-				break;
-			}
-		}
-
-		curr_pos++;
-	}
-
-	va_end(para);
-	return strlen(str);
 }
 
 
@@ -459,7 +409,90 @@ char *ftoa(float f) //, int *status)
 	return outbuf;
 }
 
+double atof(const char *s)
+{
+	int sign = 1;
+	int i = 0;
+	for( i=0; isspace((unsigned char)s[i]); i++ );
+	
+	sign = (s[i] == '-')? -1:1;
+	
+	if( s[i] == '+' || s[i] == '-' )
+		i++;
+		
+	double num = 0.0;
+	double pow = 1.0;
+	//整數 
+	for( ;isdigit((unsigned char)s[i]); i++ )
+		num = num*10 + (s[i]-'0');
+		
+	for( i++; isdigit((unsigned char)s[i]); i++ )
+	{
+		num = num*10 + (s[i]-'0');
+		pow *= 10;
+	}
+	
+	return sign * (num/pow);
+}
+/*=====================================================================================================*/
+/*=====================================================================================================*
+**函數 : sprintf
+**功能 :
+**輸入 : ( char * str, const char * format, ... )
+**輸出 : strlen(str)
+**使用 :
+**=====================================================================================================*/
+/*=====================================================================================================*/
 
+int sprintf(char *str, const char *format, ...)
+{
+	va_list para;
+	va_start(para, format);
+	int curr_pos = 0;
+	char ch[] = {'0', '\0'};
+	char integer[11];
+	str[0] = '\0';
+
+	while (format[curr_pos] != '\0') {
+		if (format[curr_pos] != '%') {
+			ch[0] = format[curr_pos];
+			strcat(str, ch);
+
+		} else {
+			switch (format[++curr_pos]) {
+			case 's':
+				strcat(str, va_arg(para, char *));
+				break;
+
+			case 'c':
+				ch[0] = (char)va_arg(para, int);
+				strcat(str, ch);
+				break;
+
+			case 'i':
+			case 'f':
+				strcat(str, ftoa(va_arg(para, double)));
+				break;
+
+			case 'd':
+				strcat(str, itoa(va_arg(para, int), integer));
+				break;
+
+			case 'u':
+				strcat(str, itoa(va_arg(para, unsigned), integer));
+				break;
+
+			default:
+				break;
+			}
+		}
+
+		curr_pos++;
+	}
+
+	va_end(para);
+	return strlen(str);
+}
 
 /*=====================================================================================================*
 **函數 : printf
