@@ -6,7 +6,7 @@
 #include "module_rs232.h"
 typedef struct nrf_package{
 
-	float roll, pitch, yaw;
+	int16_t roll, pitch, yaw;
 	int16_t acc_x, acc_y, acc_z;
 	int16_t gyro_x, gyro_y, gyro_z;
 
@@ -24,19 +24,16 @@ void System_Init(void)
 }
 
 void parse_nrf_package( nrf_package* package, uint8_t* buf)
-{
-	memcpy( &(package->roll), &buf[0], sizeof(uint16_t) );
-	memcpy( &(package->pitch), &buf[2], sizeof(uint16_t) );
-	memcpy( &(package->yaw), &buf[4], sizeof(uint16_t) );
-	memcpy( &(package->acc_x), &buf[6], sizeof(uint16_t) );
-	memcpy( &(package->acc_y), &buf[8], sizeof(uint16_t) );
-	memcpy( &(package->acc_z), &buf[10], sizeof(uint16_t) );
-	memcpy( &(package->gyro_x), &buf[12], sizeof(uint16_t) );
-	memcpy( &(package->gyro_y), &buf[14], sizeof(uint16_t) );
-	memcpy( &(package->gyro_z), &buf[16], sizeof(uint16_t) );
-	package->roll = package->roll/100;
-	package->pitch = package->pitch/100;
-	package->yaw = package->yaw/100;
+{	
+	memcpy( &(package->roll), &buf[0], sizeof(int16_t) );
+	memcpy( &(package->pitch), &buf[2], sizeof(int16_t) );
+	memcpy( &(package->yaw), &buf[4], sizeof(int16_t) );
+	memcpy( &(package->acc_x), &buf[6], sizeof(int16_t) );
+	memcpy( &(package->acc_y), &buf[8], sizeof(int16_t) );
+	memcpy( &(package->acc_z), &buf[10], sizeof(int16_t) );
+	memcpy( &(package->gyro_x), &buf[12], sizeof(int16_t) );
+	memcpy( &(package->gyro_y), &buf[14], sizeof(int16_t) );
+	memcpy( &(package->gyro_z), &buf[16], sizeof(int16_t) );
 
 }
 int main(void)
@@ -61,16 +58,20 @@ int main(void)
 		Sta = nRF_Rx_Data( (uint8_t*)RxBuf);
 
 		if(Sta == RX_DR) {
-			int i = 0;
-			for ( i = 0; i<32 ; i++ ){
-				if ( RxBuf[i] != 0){
-					USART_SendData(USART3, (uint16_t)RxBuf[i]);
-					while (USART_GetFlagStatus(USART3,
-					 USART_FLAG_TC) == RESET);
-				}
-			}
+			parse_nrf_package( &package, RxBuf);
+			printf("{'Roll':'%f','Pitch':'%f','Yaw':'%f',",
+                        package.roll/100.0,
+                        package.pitch/100.0,
+                        package.yaw/100.0);
+
+                	printf("'Acc_x':'%d','Acc_y':'%d','Acc_z':'%d',",
+                        package.acc_x, package.acc_y, package.acc_z);
+
+                	printf("'Gyro_x':'%d','Gyro_y':'%d','Gyro_z':'%d'}\r\n",
+                        package.gyro_x, package.gyro_y, package.gyro_z);
  
      	 	}
+     	 	Delay_10ms(2);
 
      	 	
 
